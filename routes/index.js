@@ -1,7 +1,8 @@
 const express=require("express")
+const {ROUTE}= require("./routes.js")
 const router=express.Router()
 
-router.get("/",(req,res)=>{
+router.get(ROUTE.Home,(req,res)=>{
     res.render("index")
 })
 

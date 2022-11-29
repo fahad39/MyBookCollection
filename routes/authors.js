@@ -1,21 +1,22 @@
 const express=require("express")
+const { ROUTE } = require("./routes")
 const router=express.Router()
 
 // All Authors
 
-router.get("/",(req,res)=>{
+router.get(ROUTE.AuthorHome,(req,res)=>{
     res.render("authors/index")
 })
 
 // New Authors
 
-router.get("/new",(req,res)=>{
+router.get(ROUTE.NewAuthor,(req,res)=>{
     res.render("authors/new")
 })
 
 // Create new Author
 
-router.post("/",(req,res)=>{
+router.post(ROUTE.CreateAuthor,(req,res)=>{
     res.send("create")
 })
 
