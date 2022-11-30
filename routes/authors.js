@@ -6,6 +6,11 @@ const Author=require("../models/author")
 // All Authors
 
 router.get(ROUTE.AuthorHome,(req,res)=>{
+    try {
+        
+    } catch  {
+        
+    }
     res.render("authors/index")
 })
 
@@ -17,8 +22,23 @@ router.get(ROUTE.NewAuthor,(req,res)=>{
 
 // Create new Author
 
-router.post(ROUTE.CreateAuthor,(req,res)=>{
-    res.send("create")
+router.post(ROUTE.CreateAuthor,async (req,res)=>{
+    const author=new Author({
+        name:req.body.name
+    })
+    try {
+        const newAuthor=await author.save()
+        // res.redirect(`authors/${newAuthor.id}`)
+        res.redirect("authors")
+    } catch {
+        res.render("authors/new",{
+            author:author,
+            errorMessage:"Error creating author"
+        })
+    }
+    
+    
+    
 })
 
 module.exports=router
