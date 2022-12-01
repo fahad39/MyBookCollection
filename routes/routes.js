@@ -2,7 +2,10 @@ exports.ROUTE={
     Home:"/",
     AuthorHome:"/",
     NewAuthor:"/new",
-    CreateAuthor:"/"
+    CreateAuthor:"/",
+    Books:"/",
+    NewBooks:"/new",
+    CreateBooks:"/"
 
 }
 
