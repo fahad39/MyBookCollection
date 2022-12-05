@@ -1,8 +1,14 @@
 const express=require("express")
 const { ROUTE } = require("./routes")
 const router=express.Router()
+const multer = require('multer');
 const Book=require("../models/book")
+const path=require("path")
+const uploadPath=path.join("public",Book.coverImageBasePath )
 const Author=require("../models/author")
+const upload=multer({
+  dest:uploadPath 
+})
 
 // All Books Route
 
@@ -28,7 +34,13 @@ router.get(ROUTE.NewBooks,async(req,res)=>{
 // Create new Books
 
 router.post(ROUTE.CreateBooks,async (req,res)=>{
-    res.send("create books")
+  const book=new Book({
+    title:req.body.title,
+    author:req.body.author,
+    publishDate:new Date(req.body.publishDate),
+    pageCount:req.body.pageCount,
+    description:req.body.description,
+  })
     
     
     
