@@ -34,6 +34,7 @@ router.post(ROUTE.CreateAuthor,async (req,res)=>{
     const author=new Author({
         name:req.body.name
     })
+    console.log("author is ",author)
     try {
         const newAuthor=await author.save()
         // res.redirect(`authors/${newAuthor.id}`)
