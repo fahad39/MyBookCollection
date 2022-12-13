@@ -18,7 +18,31 @@ const upload=multer({
 // All Books Route
 
 router.get("/",async(req,res)=>{
-    res.send("All Books")
+  let query=Book.find()
+  if(req.query.title != null && req.query.title!=""){
+  
+    query=query.regex("title",new RegExp(req.query.title,"i"))
+  }
+  console.log("berfio",req.query)
+  if(req.query.publishedBefore != null && req.query.publishedBefore!=""){
+    
+    query=query.lte("publishDate",req.query.publishedBefore)
+  }
+  if(req.query.publishedAfter != null && req.query.publishedAfter!=""){
+    
+    query=query.gte("publishDate",req.query.publishedAfter)
+  }
+  try {
+    const books=await query.exec()
+    console.log("books are",req.query)
+    res.render("books/index",{
+      books:books,
+      searchOptions:req.query
+    })
+  } catch {
+    res.redirect("/")
+  }
+   
 })
 
 // New Books
@@ -30,8 +54,7 @@ router.get("/new",async(req,res)=>{
 // Create new Books
 
 router.post("/",upload.single("cover"),async (req,res)=>{
-  const fileName=req.file !=null ? req.file.filename:null
-  console.log("author is ",req.body.Author)
+  const fileName=req.file !=null ? req.file.filename:null;
   const book=new Book({
     title:req.body.title,
     author:req.body.Author,
@@ -41,10 +64,8 @@ router.post("/",upload.single("cover"),async (req,res)=>{
     description:req.body.description,
   })
 
-    console.log("book is ",book)
   try {
     const newBook = await book.save()
-    console.log("no exception")
     // res.redirect(`books/${newBook.id}`)
     res.redirect("books")
     
