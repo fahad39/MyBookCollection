@@ -23,7 +23,7 @@ router.get("/",async(req,res)=>{
   
     query=query.regex("title",new RegExp(req.query.title,"i"))
   }
-  console.log("berfio",req.query)
+  
   if(req.query.publishedBefore != null && req.query.publishedBefore!=""){
     
     query=query.lte("publishDate",req.query.publishedBefore)
@@ -34,7 +34,6 @@ router.get("/",async(req,res)=>{
   }
   try {
     const books=await query.exec()
-    console.log("books are",req.query)
     res.render("books/index",{
       books:books,
       searchOptions:req.query
