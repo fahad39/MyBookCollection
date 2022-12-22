@@ -37,8 +37,7 @@ router.post(ROUTE.CreateAuthor,async (req,res)=>{
     console.log("author is ",author)
     try {
         const newAuthor=await author.save()
-        // res.redirect(`authors/${newAuthor.id}`)
-        res.redirect("authors")
+        res.redirect(`authors/${newAuthor.id}`)
     } catch {
         res.render("authors/new",{
             author:author,
@@ -64,8 +63,24 @@ router.get("/:id/edit",async(req,res)=>{
     
 })
 
-router.put("/:id",(req,res)=>{
-    res.send("Update Author"+req.params.id)
+router.put("/:id",async(req,res)=>{
+    let author;
+    try {
+        author=await Author.findById(req.params.id)
+        author.name=req.body.name
+        await author.save()
+        res.redirect(`/authors/${author.id}`)
+    } catch {
+        if(author===null){
+            res.redirect("/")
+        }else{
+
+            res.render("authors/edit",{
+                author:author,
+                errorMessage:"Error Updating author"
+            })
+        }
+    }
 })
 
 router.delete("/:id",(req,res)=>{
