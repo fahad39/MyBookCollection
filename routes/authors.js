@@ -2,6 +2,7 @@ const express=require("express")
 const { ROUTE } = require("./routes")
 const router=express.Router()
 const Author=require("../models/author")
+const Book=require("../models/book")
 
 // All Authors
 
@@ -34,7 +35,6 @@ router.post(ROUTE.CreateAuthor,async (req,res)=>{
     const author=new Author({
         name:req.body.name
     })
-    console.log("author is ",author)
     try {
         const newAuthor=await author.save()
         res.redirect(`authors/${newAuthor.id}`)
@@ -49,8 +49,19 @@ router.post(ROUTE.CreateAuthor,async (req,res)=>{
     
 })
 
-router.get("/:id",(req,res)=>{
-    res.send("Show Author"+req.params.id)
+router.get("/:id",async(req,res)=>{
+    try {
+        const author=await Author.findById(req.params.id)
+        const books=await Book.find({author:author.id}).limit(6).exec()
+        res.render("authors/show",{
+            author:author,
+            booksByAuthor:books
+        })
+    } catch (error) {
+        console.log(error)
+        res.redirect("/")
+        
+    }
 })
 
 router.get("/:id/edit",async(req,res)=>{
